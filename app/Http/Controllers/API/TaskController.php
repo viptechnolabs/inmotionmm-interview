@@ -11,9 +11,24 @@ class TaskController extends Controller
 {
     use ResponseTrait;
 
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        $tasks = Task::all();
+        // Retrieve the filter parameter from the request
+        $filter = $request->get('filter');
+
+        // Query tasks based on the filter parameter
+        $tasksQuery = Task::query();
+
+        if ($filter === 'completed') {
+            $tasksQuery->where('completed', true);
+        } elseif ($filter === 'incomplete') {
+            $tasksQuery->where('completed', false);
+        }
+
+        // Get the filtered tasks
+        $tasks = $tasksQuery->get();
+
+        // Return the filtered tasks using the TaskResource
         return TaskResource::collection($tasks)
             ->additional([
                 'message' => 'Task List',

@@ -37,6 +37,7 @@ Route::prefix('profile')->controller(ProfileController::class)->group(function (
 Route::prefix('task')
     ->controller(TaskController::class)
     ->group(function () {
+//        ?filter=completed
         Route::get('', 'index')->name('index');
         Route::get('{id}', 'details')->name('details');
         Route::post('store', 'store')->name('store');
