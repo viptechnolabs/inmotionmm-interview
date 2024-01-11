@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\TaskController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\LoginController;
+use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\API\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,18 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
+// Guest Routes
+Route::prefix('auth')
+    ->middleware('guest:sanctum')
+    ->group(function () {
+        Route::post('login', LoginController::class);
+    });
+
+// Profile
+Route::prefix('profile')->controller(ProfileController::class)->group(function () {
+    Route::get('', 'show');
+    Route::get('logout', 'logout');
+});
 
 // Task
 Route::prefix('task')
