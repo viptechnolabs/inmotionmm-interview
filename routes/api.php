@@ -16,9 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
 
 // Guest Routes
 Route::prefix('auth')
@@ -26,17 +23,18 @@ Route::prefix('auth')
     ->group(function () {
         Route::post('login', LoginController::class);
     });
+
 // Auth Routes
 Route::middleware('auth:sanctum')
     ->group(function () {
 
-// Profile
+        // Profile
         Route::prefix('profile')->controller(ProfileController::class)->group(function () {
             Route::get('', 'show');
             Route::get('logout', 'logout');
         });
 
-// Task
+        // Task
         Route::prefix('task')
             ->controller(TaskController::class)
             ->group(function () {
