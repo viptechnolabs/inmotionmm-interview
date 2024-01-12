@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exceptions\RecordNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
@@ -37,9 +38,12 @@ class TaskController extends Controller
             ]);
     }
 
-    public function details($id): TaskResource
+    public function details($id): \Illuminate\Http\JsonResponse|TaskResource
     {
-        $task = Task::findOrFail($id)->first();
+        $task = Task::find($id);
+        if (empty($task)) {
+            return $this->error(message: 'Task not found');
+        }
 
         return (new TaskResource($task))
             ->additional([
@@ -54,7 +58,6 @@ class TaskController extends Controller
         $title = $request->input('title');
         $description = $request->input('description');
         $completed = $request->input('completed');
-        dd($completed);
 
         $task = new Task();
         $task->title = $title;
@@ -69,7 +72,7 @@ class TaskController extends Controller
             ]);
     }
 
-    public function update(Request $request): TaskResource
+    public function update(Request $request): \Illuminate\Http\JsonResponse|TaskResource
     {
         // Request params
         $id = $request->input('id');
@@ -78,6 +81,9 @@ class TaskController extends Controller
         $completed = $request->input('completed');
 
         $task = Task::find($id);
+        if (empty($task)) {
+            return $this->error(message: 'Task not found');
+        }
         $task->title = $title;
         $task->description = $description;
         $task->completed = $completed;
@@ -93,7 +99,7 @@ class TaskController extends Controller
     public function delete($id): \Illuminate\Http\JsonResponse
     {
         $task = Task::find($id);
-        if (!$task) {
+        if (empty($task)) {
             return $this->error(message: 'Task not found');
         }
         $task->delete();
