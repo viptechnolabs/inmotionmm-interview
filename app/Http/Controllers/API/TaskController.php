@@ -15,10 +15,8 @@ class TaskController extends Controller
 
     public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        // Retrieve the filter parameter from the request
         $filter = $request->get('filter');
 
-        // Query tasks based on the filter parameter
         $tasksQuery = Task::query();
 
         if ($filter === 'completed') {
@@ -27,10 +25,8 @@ class TaskController extends Controller
             $tasksQuery->where('completed', false);
         }
 
-        // Get the filtered tasks
         $tasks = $tasksQuery->get();
 
-        // Return the filtered tasks using the TaskResource
         return TaskResource::collection($tasks)
             ->additional([
                 'message' => 'Task List',
