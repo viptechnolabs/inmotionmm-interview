@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Traits\ResponseTrait;
@@ -53,6 +54,7 @@ class TaskController extends Controller
         $title = $request->input('title');
         $description = $request->input('description');
         $completed = $request->input('completed');
+        dd($completed);
 
         $task = new Task();
         $task->title = $title;
