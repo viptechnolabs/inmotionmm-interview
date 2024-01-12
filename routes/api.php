@@ -26,21 +26,26 @@ Route::prefix('auth')
     ->group(function () {
         Route::post('login', LoginController::class);
     });
+// Auth Routes
+Route::middleware('auth:sanctum')
+    ->group(function () {
 
 // Profile
-Route::prefix('profile')->controller(ProfileController::class)->group(function () {
-    Route::get('', 'show');
-    Route::get('logout', 'logout');
-});
+        Route::prefix('profile')->controller(ProfileController::class)->group(function () {
+            Route::get('', 'show');
+            Route::get('logout', 'logout');
+        });
 
 // Task
-Route::prefix('task')
-    ->controller(TaskController::class)
-    ->group(function () {
+        Route::prefix('task')
+            ->controller(TaskController::class)
+            ->group(function () {
 //        ?filter=completed
-        Route::get('', 'index')->name('index');
-        Route::get('{id}', 'details')->name('details');
-        Route::post('store', 'store')->name('store');
-        Route::put('update', 'update')->name('update');
-        Route::delete('{id}', 'delete')->name('delete');
+                Route::get('', 'index')->name('index');
+                Route::get('{id}', 'details')->name('details');
+                Route::post('store', 'store')->name('store');
+                Route::put('update', 'update')->name('update');
+                Route::delete('{id}', 'delete')->name('delete');
+            });
+
     });
